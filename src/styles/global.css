@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Syne:wght@500;600;700;800&family=Inter:wght@300;400;500&display=swap');
+
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --bg-void:       #03040a;
+  --bg-panel:      #080b12;
+  --bg-surface:    #0c1018;
+  --bg-elevated:   #121820;
+  --bg-hover:      #17202c;
+  --bg-active:     #1c2838;
+
+  /* Borders */
+  --border:        #182030;
+  --border-mid:    #1e2d42;
+  --border-bright: #253548;
+  --border-accent: #2a4060;
+
+  /* Primary accent */
+  --accent:        #00e5a0;
+  --accent-dim:    #00b87f;
+  --accent-glow:   rgba(0, 229, 160, 0.18);
+  --accent-faint:  rgba(0, 229, 160, 0.06);
+  --accent-trace:  rgba(0, 229, 160, 0.03);
+
+  /* Secondary accents */
+  --amber:         #f0a500;
+  --amber-dim:     #c07800;
+  --amber-glow:    rgba(240, 165, 0, 0.15);
+  --red:           #f02855;
+  --red-dim:       #c01f40;
+  --red-glow:      rgba(240, 40, 85, 0.15);
+  --blue:          #2196f3;
+  --blue-dim:      #1565c0;
+  --blue-glow:     rgba(33, 150, 243, 0.15);
+  --violet:        #9c6ffa;
+  --violet-dim:    #7c4fd8;
+
+  /* Metric-specific semantic colors */
+  --metric-activation: #00e5a0;   /* same as accent */
+  --metric-gradient:   #f0a500;   /* amber */
+  --metric-shape:      #2196f3;   /* blue */
+  --metric-anomaly:    #f02855;   /* red */
+  --health-ok:         #00b87f;
+  --health-warn:       #f0a500;
+  --health-crit:       #f02855;
+
+  /* Text */
+  --text-primary:  #dce8f5;
+  --text-secondary:#7a93ae;
+  --text-muted:    #3e566a;
+  --text-dim:      #243040;
+
+  /* Typography */
+  --font-mono:     'JetBrains Mono', monospace;
+  --font-display:  'Syne', sans-serif;
+  --font-body:     'Inter', sans-serif;
+
+  /* Geometry */
+  --radius-xs:     2px;
+  --radius-sm:     4px;
+  --radius:        6px;
+  --radius-lg:     10px;
+  --radius-xl:     14px;
+
+  /* Shadows */
+  --shadow-sm:     0 1px 4px rgba(0,0,0,0.4);
+  --shadow:        0 4px 16px rgba(0,0,0,0.5);
+  --shadow-lg:     0 8px 32px rgba(0,0,0,0.6);
+  --shadow-accent: 0 0 24px rgba(0, 229, 160, 0.14);
+
+  /* Layout */
+  --toolbar-h:     48px;
+  --rail-w:        44px;
+  --panel-w:       300px;
+  --panel-w-wide:  520px;
+  --panel-w-med:   380px;
+  --panel-w-epoch: 560px;
+}
+
+/* ── Reset ──────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Scanline texture ────────────────────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 3px,
+    rgba(0,0,0,0.018) 3px, rgba(0,0,0,0.018) 4px
+  );
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ── Scrollbars ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-dim); }
+
+/* ── Base elements ──────────────────────────────────────────────────────────── */
+button {
+  font-family: var(--font-mono);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+  color: inherit;
+  transition: all 0.15s ease;
+}
+
+input, select, textarea {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-mid);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  padding: 5px 9px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent-dim);
+  box-shadow: 0 0 0 2px var(--accent-faint);
+}
+
+input:disabled, select:disabled { opacity: 0.4; cursor: not-allowed; }
+
+select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%233e566a'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+}
+
+/* ── React Flow overrides ───────────────────────────────────────────────────── */
+.react-flow__background { background: var(--bg-void) !important; }
+
+.react-flow__edge-path {
+  stroke: var(--border-accent) !important;
+  stroke-width: 1.5px;
+  transition: stroke 0.2s;
+}
+.react-flow__edge:hover .react-flow__edge-path,
+.react-flow__edge.selected .react-flow__edge-path { stroke: var(--accent-dim) !important; }
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke: var(--accent) !important;
+  filter: drop-shadow(0 0 3px var(--accent-glow));
+}
+
+.react-flow__handle {
+  width: 9px !important; height: 9px !important;
+  background: var(--bg-elevated) !important;
+  border: 1.5px solid var(--border-bright) !important;
+  border-radius: 50% !important;
+  transition: all 0.15s !important;
+}
+.react-flow__handle:hover, .react-flow__handle-connecting {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 10px var(--accent-glow) !important;
+  transform: scale(1.2) !important;
+}
+
+.react-flow__controls {
+  background: var(--bg-panel) !important;
+  border: 1px solid var(--border-mid) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+  overflow: hidden !important;
+}
+.react-flow__controls-button {
+  background: transparent !important; border: none !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--text-secondary) !important; fill: var(--text-secondary) !important;
+  transition: all 0.15s !important; width: 28px !important; height: 28px !important;
+}
+.react-flow__controls-button:hover { background: var(--bg-hover) !important; fill: var(--accent) !important; }
+.react-flow__controls-button:last-child { border-bottom: none !important; }
+
+.react-flow__minimap {
+  background: var(--bg-panel) !important;
+  border: 1px solid var(--border-mid) !important;
+  border-radius: var(--radius) !important;
+  overflow: hidden !important;
+}
+.react-flow__minimap-mask { fill: rgba(3,4,10,0.75) !important; }
+.react-flow__minimap-node { fill: var(--border-bright) !important; }
+.react-flow__attribution { display: none !important; }
+
+/* ── Chart tooltip shared style (recharts) ──────────────────────────────────── */
+.nso-tooltip {
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-mid) !important;
+  border-radius: var(--radius-sm) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--shadow) !important;
+  padding: 6px 10px !important;
+}
