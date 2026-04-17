@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback } from 'react';
 import { ReactFlowProvider } from 'reactflow';
 import Toolbar     from './components/Toolbar';
@@ -10,7 +9,6 @@ import { fetchLayerTypes, fetchNodeTypes } from './api/api';
 import './styles/global.css';
 
 export default function App() {
-  console.log('App component rendering');
   const { setLayerTypes, setNodeTypes } = useGraphStore();
   const [openUtility, setOpenUtility] = useState(null); // 'dataset' | 'config' | null
 
@@ -46,7 +44,6 @@ export default function App() {
 
   return (
     <ReactFlowProvider>
-      <h1 style={{color: 'red'}}>App is loading</h1>
       <div style={{
         display: 'flex', flexDirection: 'column',
         height: '100vh', width: '100vw',
